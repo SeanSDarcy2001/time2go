@@ -1,15 +1,26 @@
 import serial
-import time
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-
+import numpy as np
 
 ser = serial.Serial('/dev/tty.HC-05-DevB', 9600) #, timeout=2, xonxoff=False, rtscts=False, dsrdtr=False) #Tried with and without the last 3 parameters, and also at 1Mbps, same happens.
 connected = True
 button = 'b'
 moving = 'n'
+windowSize = 100
+
+def collectWindow(windowCollected) :
+    while(windowCollected == False) :
+        y = []
+        for i in range(windowSize) :
+            bytesToRead = ser.readline()
+            data = bytesToRead.decode('utf-8')
+            data = int(data.rstrip())
+            #print(data)
+            y.append(data)
+            i = i + 1
+        windowCollected = True
+    return y, windowCollected
 
 while connected == True:
-    bytesToRead = ser.readline()
-    print(bytesToRead.decode('utf-8'))
-
+    windowCollected = False
+    y, windowCollected = collectWindow(windowCollected)
+    print(y)
