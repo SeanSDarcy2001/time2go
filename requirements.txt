@@ -1,4 +1,6 @@
 pyserial
 time
 matplotlib.pyplot
+scipy
+numpy
 scipy.ndimage
