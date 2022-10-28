@@ -13,6 +13,7 @@ def main() :
     connected = serial.checkConnection()
     if connected :
         print("time2go connected!")
+        firstSample = True
     else : print("Could not connect to time2go.")
 
     #initialize signal processing toolbox
@@ -31,12 +32,12 @@ def main() :
         window = tools.weinerFilter(window) #remove baseline drift with Weiner filter
         window = tools.butterworthFilter(window) #second order lowpass butterworth filter with 9 cpm cutoff
         cwt = tools.CWT(window) #apply continuous wavelet transform to signal
+        if firstSample :
+            dataset = eggDataset(cwt, label)
+            firstSample = False
+        else : dataset.expandDataset(cwt, label)
 
-        
 
-
-
-    
 
 if __name__ == "__main()__" :
     main()
