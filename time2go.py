@@ -20,6 +20,7 @@ def main() :
     tools = processingToolbox()
 
     needsToGo = False #this is a parameter for collectWindow which allows the oneHot encoding process to track whther the user indicated needing to go previously
+    
     while connected :
         window, label = serial.collectWindow(needsToGo) #get window
 
@@ -28,14 +29,21 @@ def main() :
         elif label == [0, 0, 1] :
             needsToGo = False #user has gone, no longer needs to go
     
-        window = tools.runningMedian(window) #apply moving median filter
-        window = tools.weinerFilter(window) #remove baseline drift with Weiner filter
-        window = tools.butterworthFilter(window) #second order lowpass butterworth filter with 9 cpm cutoff
-        cwt = tools.CWT(window) #apply continuous wavelet transform to signal
+        #window = tools.runningMedian(window) #apply moving median filter
+        #window = tools.weinerFilter(window) #remove baseline drift with Weiner filter
+        #window = tools.butterworthFilter(window) #second order lowpass butterworth filter with 9 cpm cutoff
+        #cwt = tools.CWT(window) #apply continuous wavelet transform to signal
+        cwt = tools.processData(window) #does all above
+
         if firstSample :
             dataset = eggDataset(cwt, label)
             firstSample = False
         else : dataset.expandDataset(cwt, label)
+
+        connected = serial.checkConnection() #check connection before collecting another window
+    
+    print("Lost connection to time2go.")
+
 
 
 

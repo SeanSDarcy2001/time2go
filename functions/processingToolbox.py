@@ -38,3 +38,10 @@ class processingToolbox :
         """A continuous wavelet transform using a Morse (Morlet in scipy???) wavelet"""
         transformed = signal.cwt(x, self.wavelet)
         return transformed
+
+    def processData(self, window) :
+        x = self.runningMedian(window) #apply moving median filter
+        x = self.weinerFilter(x) #remove baseline drift with Weiner filter
+        x = self.butterworthFilter(x) #second order lowpass butterworth filter with 9 cpm cutoff
+        cwt = self.CWT(x) #apply continuous wavelet transform to signal
+        return cwt
