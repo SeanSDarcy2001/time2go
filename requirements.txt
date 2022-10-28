@@ -3,4 +3,4 @@ time
 matplotlib.pyplot
 scipy
 numpy
-scipy.ndimage
+torch
