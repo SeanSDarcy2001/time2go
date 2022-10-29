@@ -3,13 +3,16 @@ Created on Fri Oct 28 11:00:00 2022
 @author: sdarcy2
 """
 
-from functions import readSerial, processingToolbox, eggDataset
+from time2go.readSerial import readSerial
+from time2go.processingToolbox import processingToolbox
+from time2go.eggDataset import eggDataset
+
 
 def main() : 
 
     #initialize time2go serial reader
     print("Initializing time2go...")
-    serial = readSerial()
+    serial = readSerial('/dev/tty.HC-05-DevB')
     connected = serial.checkConnection()
     if connected :
         print("time2go connected!")
@@ -43,8 +46,6 @@ def main() :
         connected = serial.checkConnection() #check connection before collecting another window
     
     print("Lost connection to time2go.")
-
-
 
 
 if __name__ == "__main()__" :

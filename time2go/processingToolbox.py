@@ -2,7 +2,7 @@ import numpy as np
 from scipy import signal
 from scipy.ndimage import uniform_filter1d
 
-class processingToolbox :
+class processingToolbox() :
 
     def __init__(self):
         """Initialize the processing toolbox"""

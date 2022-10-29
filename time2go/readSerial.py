@@ -1,10 +1,11 @@
 import serial
 
-class readSerial :
+class readSerial() :
     
-    def __init__(self):
+    def __init__(self, port:str):
         """Initialize the serial reader"""
-        self.ser = serial.Serial('/dev/tty.HC-05-DevB', 9600) #, timeout=2, xonxoff=False, rtscts=False, dsrdtr=False) #Tried with and without the last 3 parameters, and also at 1Mbps, same happens.
+        self.port = port
+        self.ser = serial.Serial(self.port, 9600) #, timeout=2, xonxoff=False, rtscts=False, dsrdtr=False) #Tried with and without the last 3 parameters, and also at 1Mbps, same happens.
         self.connected = True
         self.button = -2
         self.moving = -1
