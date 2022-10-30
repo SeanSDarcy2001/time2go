@@ -16,7 +16,8 @@ class readSerial() :
         y = []
         i = 0
         presses = 0
-        while i << self.windowSize :
+        while i < self.windowSize :
+            #print("reading")
             bytesToRead = self.ser.readline()
             data = bytesToRead.decode('utf-8')
             if data == self.moving :

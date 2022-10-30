@@ -1,14 +1,9 @@
-"""
-Created on Fri Oct 28 11:00:00 2022
-@author: sdarcy2
-"""
-
 from time2go.readSerial import readSerial
 from time2go.processingToolbox import processingToolbox
 from time2go.eggDataset import eggDataset
 import matplotlib.pyplot as plt
 import numpy as np
-
+import pickle
 
 def main() : 
 
@@ -21,34 +16,20 @@ def main() :
         firstSample = True
     else : print("Could not connect to time2go.")
 
-    #initialize signal processing toolbox
-    tools = processingToolbox()
 
     needsToGo = False #this is a parameter for collectWindow which allows the oneHot encoding process to track whther the user indicated needing to go previously
     
     while connected :
         window, label = serial.collectWindow(needsToGo) #get window
-        print(len(window))
-
-        if label == [0, 1, 0] :
-            needsToGo = True #user has indicated that they need to go
-        elif label == [0, 0, 1] :
-            needsToGo = False #user has gone, no longer needs to go
-    
-        #window = tools.runningMedian(window) #apply moving median filter
-        #window = tools.weinerFilter(window) #remove baseline drift with Weiner filter
-        #window = tools.butterworthFilter(window) #second order lowpass butterworth filter with 9 cpm cutoff
-        #cwt = tools.CWT(window) #apply continuous wavelet transform to signal
         
         
-        cwt = tools.processData(window) #does all above
-        plt.plot(np.linspace(0, 6000, 6000), cwt)
-        plt.show()
+ 
 
         if firstSample :
-            dataset = eggDataset(cwt, label)
+            with open('sampleWindow2.pkl', 'wb') as f:
+                pickle.dump(window, f)
             firstSample = False
-        else : dataset.expandDataset(cwt, label)
+        #else : dataset.expandDataset(cwt, label)
 
         connected = serial.checkConnection() #check connection before collecting another window
     
