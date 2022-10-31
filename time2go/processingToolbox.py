@@ -6,8 +6,8 @@ class processingToolbox() :
 
     def __init__(self):
         """Initialize the processing toolbox"""
-        self.fs = 9600 #sampling rate
-        self.butter = signal.butter(2, 0.15, fs=self.fs, output='sos')  #figure out what first param does, cutoff should be normalized by sampling rate, maybe not if iterativedownsample used
+        self.fs = 100 #sampling rate
+        self.butter = signal.butter(2, .15, fs=self.fs, output='sos')  #figure out what first param does, cutoff should be normalized by sampling rate, maybe not if iterativedownsample used
         self.wavelet = signal.morlet2(6000, 20)
         
     def runningMean(self, x, N) :
@@ -26,7 +26,7 @@ class processingToolbox() :
 
     def weinerFilter(self, x) :
         """Apply Weiner filter to remove baseline drift"""
-        filtered = signal.wiener(x)
+        filtered = signal.wiener(x.astype('float64'))
         return filtered
 
     def butterworthFilter(self, x) :
@@ -36,7 +36,7 @@ class processingToolbox() :
 
     def CWT(self, x) :
         """A continuous wavelet transform using a Morse (Morlet in scipy???) wavelet"""
-        transformed = signal.cwt(x, self.wavelet)
+        transformed = signal.cwt(x.astype('float64'), self.wavelet, dtype = 'complex128')
         return transformed
 
     def processData(self, window) :
