@@ -9,17 +9,19 @@ class readSerial() :
         self.connected = True
         self.button = -2
         self.moving = -1
-        self.windowSize = 6000 #100 samples per second, minute long windows
+        self.windowSize = 1 #100 samples per second, minute long windows
+        #altered to 300 samples a second for 10 second windows
 
     def collectWindow(self, previousPress = False) :
         """Collect a window of length windowSize, handle button and moving cases"""
         y = []
         i = 0
         presses = 0
-        while i < self.windowSize :
-            #print("reading")
+        while i < self.windowSize and self.connected:
+            print("reading")
             bytesToRead = self.ser.readline()
             data = bytesToRead.decode('utf-8')
+            print(data)
             if data == self.moving :
                 #if moving, do not add to window
                 print("moving")
@@ -33,6 +35,7 @@ class readSerial() :
                 data = int(data.rstrip())
                 y.append(data)
                 i += 1
+            self.connected = self.checkConnection()
             
         #processing button presses- may need work
         if presses == 0 and previousPress == False:
@@ -43,7 +46,7 @@ class readSerial() :
         elif presses == 1 or previousPress:
             label = [0, 1, 0] #one hot encoding for needs to go
     
-        return y, label
+        return y, label, self.connected
 
     def checkConnection(self) :
         """Check serial connection, return True is connected, False o.w."""
