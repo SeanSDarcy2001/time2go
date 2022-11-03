@@ -14,9 +14,9 @@ print("NEEDS TO GO:", needsToGo)
 while connected :
         window, label, connected = serial.collectWindow(needsToGo) #get window
 
-        if label == [0, 1, 0] :
+        if label == [0, 1] :
             needsToGo = True #user has indicated that they need to go
-        elif label == [0, 0, 1] :
-            needsToGo = False #user has gone, no longer needs to go
+        elif label == [1, 0] :
+            needsToGo = False #user has gone/no longer needs to go
 
         print("NEEDS TO GO:", needsToGo)  
