@@ -30,12 +30,14 @@ class readSerial() :
             #print("passed readline")
             data = bytesToRead.decode('utf-8')
 
-            data = data.strip()
-            print(data)
+            #data = data.strip()
+            #print(data)
             
 
             #figure out what channel data belongs to
-            channel, data = self.whichData(data)
+            channel, data = self.whichChannel(data)
+
+            data = data.strip()
 
             #data = int.from_bytes(bytesToRead, 'big', signed = "True")
             #print(data)
@@ -45,7 +47,7 @@ class readSerial() :
                 print("moving")
                 #y.append('moving')
             elif data == self.button :
-                print("PRESS RECEIVED")
+                print("PRESS RECEIVED", presses)
                 #button press, do rough interpolation by repeating previous value
                 #y.append(data[i - 1])
                 presses += 1
@@ -80,11 +82,14 @@ class readSerial() :
     def whichChannel(self, data) :
         """Check what channel data belongs to- return channel, data"""
         channelData = data.split(':')
-        if channelData[0] == "C1" :
+        channel = 0
+        if channelData[0] == "0" :
+            channel = 0
+        if channelData[0] == "1" :
             channel = 1
-        elif channelData[0] == "C2" :
+        elif channelData[0] == "2" :
             channel = 2
-        elif channelData[0] == "C3" :
+        elif channelData[0] == "3" :
             channel = 3
 
         return channel, channelData[1]
